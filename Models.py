@@ -5,24 +5,27 @@ myDataBase = SqliteDatabase("meus_dados.db")
 
 class MinhaBase(Model):
     class Meta:
-        Database = my
+        Database = myDataBase
 
-class Tarefas(MinhaBase):
+class aluno(MinhaBase):
+    nome = CharField()
+    matricula = CharField(unique = True)
+
+    def __str__(self):
+        return f"Aluno: {self.nome} Matricula: {self.matricula}"
+    
+class curso(MinhaBase):
+    nome = CharField()
+    descricao = TextField()
+
+class tarefas(MinhaBase):
     nome = CharField()
     descricao = CharField()
     prazo = DateField()
     status = CharField(default = "Pedente")
-    curso = ForeignKeyField(Curso, backref= "Tarefas")
-
-class Aluno(MinhaBase):
-    nome = CharField()
-    matricula = CharField(unique = True)
-
-class Curso(MinhaBase):
-    nome = CharField()
-    descricao = TextField()
+    curso = ForeignKeyField(curso, backref= "Tarefas")
 
 
 
 myDataBase.connect()
-myDataBase.create_tables([])
+myDataBase.create_tables([curso, tarefas, aluno])
