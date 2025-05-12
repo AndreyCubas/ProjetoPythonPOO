@@ -10,6 +10,7 @@ class MinhaBase(Model):
 class aluno(MinhaBase):
     nome = CharField()
     matricula = CharField(unique = True)
+    email = CharField()
 
     def __str__(self):
         return f"Aluno: {self.nome} Matricula: {self.matricula}"
@@ -24,6 +25,11 @@ class tarefas(MinhaBase):
     prazo = DateField()
     status = CharField(default = "Pedente")
     curso = ForeignKeyField(curso, backref= "Tarefas")
+
+class Professor(MinhaBase):
+    nome = CharField()
+    email = CharField()
+    siape = CharField(unique = True)
 
 
 
