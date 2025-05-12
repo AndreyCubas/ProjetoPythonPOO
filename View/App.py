@@ -1,4 +1,4 @@
-import Models
+from Models import *
 from datetime import date
 from peewee import *
 
@@ -10,5 +10,5 @@ def MenuGeral():
     print("--------------------------------")
     print("1. Estudante")
     print("2. Professor")
-    
 
+MenuGeral()
