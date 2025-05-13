@@ -24,7 +24,6 @@ class Teacher(BaseModel):
 class Course(BaseModel):
 
     name = CharField()
-    description = TextField()
     teacher = ForeignKeyField(Teacher, backref='courses')
     description = CharField()
     content = CharField()
@@ -39,4 +38,3 @@ class Task(BaseModel):
 
 my_database.connect()
 my_database.create_tables([Course, Task, Student])
-
