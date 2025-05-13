@@ -14,11 +14,20 @@ class Student(BaseModel):
     name = CharField()
     registration = CharField(unique=True)
     email = CharField()
+
+class Teacher(BaseModel):
+
+    name = CharField()
+    email = CharField()
+    siape = CharField(unique=True)
     
 class Course(BaseModel):
 
     name = CharField()
     description = TextField()
+    teacher = ForeignKeyField(Teacher, backref='courses')
+    description = CharField()
+    content = CharField()
 
 class Task(BaseModel):
 
@@ -27,12 +36,6 @@ class Task(BaseModel):
     deadline = DateField()
     status = CharField(default="Pending")
     course = ForeignKeyField(Course, backref="tasks")
-
-class Teacher(BaseModel):
-
-    name = CharField()
-    email = CharField()
-    siape = CharField(unique=True)
 
 my_database.connect()
 my_database.create_tables([Course, Task, Student])
