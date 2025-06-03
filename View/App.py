@@ -1,6 +1,9 @@
-from Models import *
-from datetime import date
-from peewee import *
+from Models.Model import *
+from Controllers.Teacher import *
+from Controllers.Tasks import *
+from Controllers.Course import *
+from Controllers.Students import *
+from View.Login import *
 
 print("Bem Vindo Ao Sistema!")
 
@@ -27,7 +30,7 @@ def MenuGeral():
             print("Opção inválida. Tente novamente.")
 
 
-def professor_menu(current_professor):
+def professorMenu(current_professor):
     while True:
         print("\n=== MENU DO PROFESSOR ===")
         print("1 - Gerenciar Estudantes")
@@ -53,7 +56,7 @@ def professor_menu(current_professor):
             print("Opção inválida.")
 
 
-def student_menu():
+def studentMenu(current_student):
     while True:
         print("\n=== MENU DO ESTUDANTE ===")
         print("1 - Listar Professores")
@@ -66,7 +69,7 @@ def student_menu():
         if option == "1":
             list_teachers()
         elif option == "2":
-            list_courses()
+            listCourses()
         elif option == "3":
             list_tasks()
         elif option == "0":
@@ -74,6 +77,7 @@ def student_menu():
             break
         else:
             print("Opção inválida.")
+
 
 def student_management():
     while True:
@@ -134,13 +138,13 @@ def course_management(current_professor):
 
         option = input("Opção: ")
         if option == "1":
-            create_course(current_professor)
+            createCourse(current_professor)
         elif option == "2":
-            list_courses()
+            listCourses()
         elif option == "3":
-            edit_course()
+            editCourse()
         elif option == "4":
-            delete_course()
+            deleteCourse()
         elif option == "0":
             break
         else:

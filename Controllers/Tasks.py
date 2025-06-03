@@ -3,14 +3,14 @@ from datetime import datetime
 
 def create_task():
     print("\n------ Cadastro de Tarefa ------")
-    ra = input("Matrícula do Aluno: ")
+    registration = input("Matrícula do Aluno: ")
     course_id = input("ID do Curso: ")
     name = input("Título da Tarefa: ")
     description = input("Descrição: ")
     deadline_str = input("Data de entrega (AAAA-MM-DD): ")
 
     try:
-        student = Student.get(Student.ra == ra)
+        student = Student.get(Student.registration == registration)
         course = Course.get(Course.id == course_id)
         deadline = datetime.strptime(deadline_str, "%Y-%m-%d")
 
@@ -41,9 +41,10 @@ def list_tasks():
 
     print(f"Total: {len(tasks)}\n")
     for task in tasks:
-        print(f"{task.name} | Aluno: {task.student.name} | Curso: {task.course.name} | Status: {task.status} | Entrega: {task.deadline.strftime('%d/%m/%Y')}")
+        print(f"ID: {task.id} | Nome: {task.name} | Aluno: {task.student.name} | Curso: {task.course.name} | Status: {task.status} | Entrega: {task.deadline.strftime('%d/%m/%Y')}")
 
 def edit_task():
+    list_tasks()
     task_id = input("\nInforme o ID da tarefa que será editada: ")
 
     try:
@@ -67,6 +68,7 @@ def edit_task():
         print("Tarefa não encontrada.")
 
 def delete_task():
+    list_tasks()
     task_id = input("\nInforme o ID da tarefa que será deletada: ")
 
     try:

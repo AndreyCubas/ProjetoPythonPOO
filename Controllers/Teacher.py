@@ -34,8 +34,9 @@ def list_teachers():
         print(f" Nome: {teacher.name} | SIAPE: {teacher.siape}")
 
 def edit_teacher():
+    list_teachers()
     siape = input("\nInforme o SIAPE do professor que será editado: ")
-
+    
     try:
         teacher = Teacher.get(Teacher.siape == siape)
 
@@ -53,8 +54,9 @@ def edit_teacher():
         print(" Professor não encontrado.")
 
 def delete_teacher():
+    list_teachers()
     siape = input("\nInforme o SIAPE do professor que será deletado: ")
-
+    
     try:
         teacher = Teacher.get(Teacher.siape == siape)
         teacher.delete_instance()

@@ -6,9 +6,9 @@ def create_student():
     phone = input("Telefone: ")
     email = input("Email: ")
     password = input("Senha: ")
-    ra = input("Matrícula: ")
+    registration = input("Matrícula: ")
 
-    if Student.select().where(Student.ra == ra).exists():
+    if Student.select().where(Student.registration == registration).exists():
         print("Já existe um estudante com essa matrícula.")
         return
 
@@ -17,7 +17,7 @@ def create_student():
         phone=phone,
         email=email,
         password=password,
-        ra=ra
+        registration=registration
     )
     print(f"\ Estudante {student.name} cadastrado com sucesso!\n")
 
@@ -31,20 +31,21 @@ def list_students():
 
     print(f"Total: {len(students)}\n")
     for student in students:
-        print(f" Nome: {student.name} | Matrícula: {student.ra}")
+        print(f" Nome: {student.name} | Matrícula: {student.registration}")
 
 def edit_student():
-    ra = input("\nInforme a matrícula do estudante a ser editado: ")
+    list_students()
+    registration = input("\nInforme a matrícula do estudante a ser editado: ")
 
     try:
-        student = Student.get(Student.ra == ra)
+        student = Student.get(Student.registration == registration)
 
         print("\n--- Informe os novos dados ---")
         student.name = input("Nome: ")
         student.phone = input("Telefone: ")
         student.email = input("Email: ")
         student.password = input("Senha: ")
-        student.ra = input("Nova Matrícula: ")
+        student.registration = input("Nova Matrícula: ")
         student.save()
 
         print(f"\n Estudante {student.name} atualizado com sucesso!\n")
@@ -53,10 +54,11 @@ def edit_student():
         print(" Estudante não encontrado.")
 
 def delete_student():
-    ra = input("\nInforme a matrícula do estudante a ser deletado: ")
+    list_students()
+    registration = input("\nInforme a matrícula do estudante a ser deletado: ")
 
     try:
-        student = Student.get(Student.ra == ra)
+        student = Student.get(Student.registration == registration)
         student.delete_instance()
         print(f"\n Estudante {student.name} removido com sucesso!\n")
 
