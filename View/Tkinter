@@ -1,0 +1,25 @@
+import tkinter as ctk
+import customtkinter as ctk
+def abrir_tela_aluno():
+    janela_aluno = ctk.Toplevel()
+    janela_aluno.title("Cadastro de Aluno")
+    janela_aluno.geometry("300x200")
+    ctk.Label(janela_aluno, text="Tela de Aluno").pack(pady=10)
+
+def abrir_tela_professor():
+    janela_professor = ctk.Toplevel()
+    janela_professor.title("Cadastro de Professor")
+    janela_professor.geometry("300x200")
+    ctk.Label(janela_professor, text="Tela de Professor").pack(pady=10)
+
+menuPrincipal = ctk.Ctk()
+menuPrincipal.title("MENU PRINCIPAL")
+menuPrincipal.geometry("400x300")
+
+ctk.set_appearance_mode("dark")
+ctk.Label(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 16)).pack(pady=20)
+
+ctk.Button(menuPrincipal, text="Alunos", command=abrir_tela_aluno).pack(pady=10)
+ctk.Button(menuPrincipal, text="Professores", command=abrir_tela_professor).pack(pady=10)
+
+menuPrincipal.mainloop()
