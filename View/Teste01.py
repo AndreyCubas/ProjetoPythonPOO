@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import customtkinter as ctk
 from Models.Model import Student, Teacher
 import tkinter as tk
@@ -8,9 +11,9 @@ def tela_aluno():
     ctk.set_appearance_mode("dark")
     janela_aluno = ctk.CTkToplevel()
     janela_aluno.title("Cadastro de Aluno")
-    janela_aluno.geometry("700x550") 
+    janela_aluno.geometry("750x650") 
 
-    ctk.CTkLabel(janela_aluno, text="Tela de Aluno").grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+    ctk.CTkLabel(janela_aluno, text="Tela de Aluno", font=("Arial", 20)).grid(row=0, column=0, columnspan=2, padx=5, pady=5)
     
     ctk.CTkLabel(janela_aluno, text="Nome:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
     entry_name = ctk.CTkEntry(janela_aluno, width=200)
@@ -57,19 +60,9 @@ def tela_aluno():
             listbox.insert(tk.END, f"{s.id} | {s.name} | {s.registration}")
 
     def on_list_select(event=None):
-        sel = listbox.curselection()
-        if not sel:
-            return
-        val = listbox.get(sel[0])
-        sid = int(val.split('|')[0].strip())
-        s = Student.get_by_id(sid)
-        entry_name.delete(0, tk.END); entry_name.insert(0, s.name)
-        entry_phone.delete(0, tk.END); entry_phone.insert(0, s.phone)
-        entry_email.delete(0, tk.END); entry_email.insert(0, s.email)
-        entry_password.delete(0, tk.END); entry_password.insert(0, s.password)
-        entry_registration.delete(0, tk.END); entry_registration.insert(0, s.registration)
-        current_student_id['id'] = s.id
-        btn_salvar.configure(text="Atualizar")
+        listbox = tk.Listbox(janela_aluno, width=30, height=10)
+        listbox.pack()
+
 
     def salvar_aluno():
         name = entry_name.get()
