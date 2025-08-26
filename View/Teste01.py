@@ -96,7 +96,7 @@ def abrir_tela_professor():
         entry_phone_prof.delete(0, tk.END)
         entry_email_prof.delete(0, tk.END)
         entry_password_prof.delete(0, tk.END)
-    entry_siape_prof.delete(0, tk.END)
+        entry_siape_prof.delete(0, tk.END)
 
     def salvar_professor():
         name = entry_name_prof.get()
