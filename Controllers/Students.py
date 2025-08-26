@@ -64,4 +64,7 @@ def delete_student():
 
     except Student.DoesNotExist:
         print(" Estudante não encontrado.")
+<<<<<<< HEAD
 
+=======
+>>>>>>> b47e31540d1a1e2e9d4e7cb7d9565b04fc90fc94
