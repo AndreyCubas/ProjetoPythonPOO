@@ -11,29 +11,30 @@ def tela_aluno():
     ctk.set_appearance_mode("dark")
     janela_aluno = ctk.CTkToplevel()
     janela_aluno.title("Cadastro de Aluno")
-    janela_aluno.geometry("750x650") 
+    janela_aluno.geometry("760x460") 
 
-    ctk.CTkLabel(janela_aluno, text="Tela de Aluno", font=("Arial", 20)).grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+    ctk.CTkLabel(janela_aluno, text="Tela de Aluno", font=("Arial", 30)).grid(row=0, column=0, columnspan=6, padx=(10, 5), pady=10, sticky="ew")
     
-    ctk.CTkLabel(janela_aluno, text="Nome:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+    ctk.CTkLabel(janela_aluno, text="Nome:").grid(row=1, column=0, padx=(5, 2), pady=5, sticky="e")
     entry_name = ctk.CTkEntry(janela_aluno, width=200)
-    entry_name.grid(row=1, column=1, padx=10, pady=10)
+    entry_name.grid(row=1, column=1, padx=(2, 5), pady=7, sticky="w")
 
-    ctk.CTkLabel(janela_aluno, text="Telefone:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
+
+    ctk.CTkLabel(janela_aluno, text="Telefone:").grid(row=2, column=0, padx=(5, 2), pady=5, sticky="e")
     entry_phone = ctk.CTkEntry(janela_aluno, width=200)
-    entry_phone.grid(row=2, column=1, padx=10, pady=10)
+    entry_phone.grid(row=2, column=1, padx=(2, 5), pady=5, sticky="w")
 
-    ctk.CTkLabel(janela_aluno, text="Email:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
+    ctk.CTkLabel(janela_aluno, text="Email:").grid(row=3, column=0, padx=(5, 2), pady=5, sticky="e")
     entry_email = ctk.CTkEntry(janela_aluno, width=200)
-    entry_email.grid(row=3, column=1, padx=10, pady=10)
+    entry_email.grid(row=3, column=1, padx=(2, 5), pady=5, sticky="w")
 
-    ctk.CTkLabel(janela_aluno, text="Senha:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
+    ctk.CTkLabel(janela_aluno, text="Senha:").grid(row=4, column=0, padx=(5, 2), pady=5, sticky="e")
     entry_password = ctk.CTkEntry(janela_aluno, show="*", width=200)
-    entry_password.grid(row=4, column=1, padx=10, pady=10)
+    entry_password.grid(row=4, column=1, padx=(2, 5), pady=5, sticky="w")
 
-    ctk.CTkLabel(janela_aluno, text="Matrícula:").grid(row=5, column=0, padx=10, pady=10, sticky="w")
+    ctk.CTkLabel(janela_aluno, text="Matrícula:").grid(row=5, column=0, padx=(5, 2), pady=5, sticky="e")
     entry_registration = ctk.CTkEntry(janela_aluno, width=200)
-    entry_registration.grid(row=5, column=1, padx=10, pady=10)
+    entry_registration.grid(row=5, column=1, padx=(2, 5), pady=5, sticky="w")
 
     current_student_id = {'id': None}
 
@@ -49,9 +50,9 @@ def tela_aluno():
     list_frame = tk.Frame(janela_aluno)
     list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
     scrollbar = tk.Scrollbar(list_frame)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    scrollbar.grid(side=tk.RIGHT, fill=tk.Y)
     listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
-    listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    listbox.grid(side=tk.LEFT, fill=tk.BOTH, expand=True)
     scrollbar.config(command=listbox.yview)
 
     def load_students():
@@ -61,7 +62,7 @@ def tela_aluno():
 
     def on_list_select(event=None):
         listbox = tk.Listbox(janela_aluno, width=30, height=10)
-        listbox.pack()
+        listbox.grid()
 
 
     def salvar_aluno():
@@ -88,8 +89,8 @@ def tela_aluno():
                 s.registration = registration
                 s.save()
                 messagebox.showinfo("Sucesso", f"Aluno {s.name} atualizado com sucesso!")
-        except IntegrityError as e:
-            messagebox.showerror("Erro", f"Falha ao salvar: {e}")
+        except IntegrityError as erro:
+            messagebox.showerror("Erro", f"Falha ao salvar: {erro}")
         limpar_campos()
         load_students()
 
@@ -112,15 +113,15 @@ def tela_aluno():
     lb_botoes = ctk.CTkFrame(janela_aluno)
     lb_botoes.grid(row=6, column=0, columnspan=2, pady=5)
     btn_salvar = ctk.CTkButton(lb_botoes, text="Salvar", command=salvar_aluno)
-    btn_salvar.pack(side="left", padx=6)
+    btn_salvar.grid(side="left", padx=6)
     btn_limpar = ctk.CTkButton(lb_botoes, text="Limpar", command=limpar_campos)
-    btn_limpar.pack(side="left", padx=6)
+    btn_limpar.grid(side="left", padx=6)
     btn_editar = ctk.CTkButton(lb_botoes, text="Editar", command=editar_selecionado)
-    btn_editar.pack(side="left", padx=6)
+    btn_editar.grid(side="left", padx=6)
     btn_excluir = ctk.CTkButton(lb_botoes, text="Excluir", command=excluir_selecionado)
-    btn_excluir.pack(side="left", padx=6)
+    btn_excluir.grid(side="left", padx=6)
     btn_atualizar = ctk.CTkButton(lb_botoes, text="Atualizar Lista", command=load_students)
-    btn_atualizar.pack(side="left", padx=6)
+    btn_atualizar.grid(side="left", padx=6)
 
     load_students()
 
@@ -166,9 +167,9 @@ def abrir_tela_professor():
     list_frame = tk.Frame(janela_professor)
     list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
     scrollbar = tk.Scrollbar(list_frame)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    scrollbar.grid(side=tk.RIGHT, fill=tk.Y)
     listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
-    listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    listbox.grid(side=tk.LEFT, fill=tk.BOTH, expand=True)
     scrollbar.config(command=listbox.yview)
 
     def load_professors():
@@ -215,8 +216,8 @@ def abrir_tela_professor():
                 p.siape = siape
                 p.save()
                 messagebox.showinfo("Sucesso", f"Professor {p.name} atualizado com sucesso!")
-        except IntegrityError as e:
-            messagebox.showerror("Erro", f"Falha ao salvar: {e}")
+        except IntegrityError as erro:
+            messagebox.showerror("Erro", f"Falha ao salvar: {erro}")
         limpar_campos_professor()
         load_professors()
 
@@ -239,15 +240,15 @@ def abrir_tela_professor():
     lb_botoes_prof = ctk.CTkFrame(janela_professor)
     lb_botoes_prof.grid(row=6, column=0, columnspan=2, pady=5)
     btn_salvar_prof = ctk.CTkButton(lb_botoes_prof, text="Salvar", command=salvar_professor)
-    btn_salvar_prof.pack(side="left", padx=6)
+    btn_salvar_prof.grid(side="left", padx=6)
     btn_limpar_prof = ctk.CTkButton(lb_botoes_prof, text="Limpar", command=limpar_campos_professor)
-    btn_limpar_prof.pack(side="left", padx=6)
+    btn_limpar_prof.grid(side="left", padx=6)
     btn_editar_prof = ctk.CTkButton(lb_botoes_prof, text="Editar", command=editar_prof_selecionado)
-    btn_editar_prof.pack(side="left", padx=6)
+    btn_editar_prof.grid(side="left", padx=6)
     btn_excluir_prof = ctk.CTkButton(lb_botoes_prof, text="Excluir", command=excluir_prof_selecionado)
-    btn_excluir_prof.pack(side="left", padx=6)
+    btn_excluir_prof.grid(side="left", padx=6)
     btn_atualizar_prof = ctk.CTkButton(lb_botoes_prof, text="Atualizar Lista", command=load_professors)
-    btn_atualizar_prof.pack(side="left", padx=6)
+    btn_atualizar_prof.grid(side="left", padx=6)
 
     load_professors()
 
@@ -256,9 +257,9 @@ menuPrincipal = ctk.CTk()
 menuPrincipal.title("Menu Principal")
 menuPrincipal.geometry("600x500")
 ctk.set_appearance_mode("dark")
-ctk.CTkLabel(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 30)).pack(pady=20)
+ctk.CTkLabel(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 30)).grid(pady=20)
 
-ctk.CTkButton(menuPrincipal, text="Alunos", command=tela_aluno, font=("Arial", 17)).pack(pady=10)
-ctk.CTkButton(menuPrincipal, text="Professores", command=abrir_tela_professor, font=("Arial", 17)).pack(pady=10)
+ctk.CTkButton(menuPrincipal, text="Alunos", command=tela_aluno, font=("Arial", 17)).grid(pady=10)
+ctk.CTkButton(menuPrincipal, text="Professores", command=abrir_tela_professor, font=("Arial", 17)).grid(pady=10)
 
 menuPrincipal.mainloop()
