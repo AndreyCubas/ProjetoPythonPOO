@@ -2,6 +2,7 @@ import customtkinter as ctk
 from Models.Model import Student, Teacher
 import tkinter as tk
 from tkinter import messagebox
+from peewee import IntegrityError
 
 def tela_aluno():
     ctk.set_appearance_mode("dark")
@@ -31,12 +32,44 @@ def tela_aluno():
     entry_registration = ctk.CTkEntry(janela_aluno, width=200)
     entry_registration.grid(row=5, column=1, padx=10, pady=10)
 
+    current_student_id = {'id': None}
+
     def limpar_campos():
         entry_name.delete(0, tk.END)
         entry_phone.delete(0, tk.END)
         entry_email.delete(0, tk.END)
         entry_password.delete(0, tk.END)
         entry_registration.delete(0, tk.END)
+        current_student_id['id'] = None
+        btn_salvar.configure(text="Salvar")
+
+    list_frame = tk.Frame(janela_aluno)
+    list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+    scrollbar = tk.Scrollbar(list_frame)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
+    listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    scrollbar.config(command=listbox.yview)
+
+    def load_students():
+        listbox.delete(0, tk.END)
+        for s in Student.select():
+            listbox.insert(tk.END, f"{s.id} | {s.name} | {s.registration}")
+
+    def on_list_select(event=None):
+        sel = listbox.curselection()
+        if not sel:
+            return
+        val = listbox.get(sel[0])
+        sid = int(val.split('|')[0].strip())
+        s = Student.get_by_id(sid)
+        entry_name.delete(0, tk.END); entry_name.insert(0, s.name)
+        entry_phone.delete(0, tk.END); entry_phone.insert(0, s.phone)
+        entry_email.delete(0, tk.END); entry_email.insert(0, s.email)
+        entry_password.delete(0, tk.END); entry_password.insert(0, s.password)
+        entry_registration.delete(0, tk.END); entry_registration.insert(0, s.registration)
+        current_student_id['id'] = s.id
+        btn_salvar.configure(text="Atualizar")
 
     def salvar_aluno():
         name = entry_name.get()
@@ -49,19 +82,56 @@ def tela_aluno():
             messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
             return
 
-    novo_aluno = Student.create(name=name, phone=phone, email=email, password=password, registration=registration)
-    messagebox.showinfo("Sucesso", f"Aluno {novo_aluno.name} salvo com sucesso!")
-    limpar_campos()
+        try:
+            if current_student_id['id'] is None:
+                novo_aluno = Student.create(name=name, phone=phone, email=email, password=password, registration=registration)
+                messagebox.showinfo("Sucesso", f"Aluno {novo_aluno.name} salvo com sucesso!")
+            else:
+                s = Student.get_by_id(current_student_id['id'])
+                s.name = name
+                s.phone = phone
+                s.email = email
+                s.password = password
+                s.registration = registration
+                s.save()
+                messagebox.showinfo("Sucesso", f"Aluno {s.name} atualizado com sucesso!")
+        except IntegrityError as e:
+            messagebox.showerror("Erro", f"Falha ao salvar: {e}")
+        limpar_campos()
+        load_students()
+
+    def editar_selecionado():
+        on_list_select()
+
+    def excluir_selecionado():
+        sel = listbox.curselection()
+        if not sel:
+            messagebox.showwarning("Aviso", "Nenhum registro selecionado.")
+            return
+        val = listbox.get(sel[0])
+        sid = int(val.split('|')[0].strip())
+        if messagebox.askyesno("Confirma", "Deseja excluir este aluno?"):
+            s = Student.get_by_id(sid)
+            s.delete_instance()
+            limpar_campos()
+            load_students()
 
     lb_botoes = ctk.CTkFrame(janela_aluno)
-    lb_botoes.grid(row=6, column=0, columnspan=2, pady=20)
-    
+    lb_botoes.grid(row=6, column=0, columnspan=2, pady=5)
     btn_salvar = ctk.CTkButton(lb_botoes, text="Salvar", command=salvar_aluno)
-    btn_salvar.pack(side="left", padx=10)
-
+    btn_salvar.pack(side="left", padx=6)
     btn_limpar = ctk.CTkButton(lb_botoes, text="Limpar", command=limpar_campos)
-    btn_limpar.pack(side="left", padx=10)
+    btn_limpar.pack(side="left", padx=6)
+    btn_editar = ctk.CTkButton(lb_botoes, text="Editar", command=editar_selecionado)
+    btn_editar.pack(side="left", padx=6)
+    btn_excluir = ctk.CTkButton(lb_botoes, text="Excluir", command=excluir_selecionado)
+    btn_excluir.pack(side="left", padx=6)
+    btn_atualizar = ctk.CTkButton(lb_botoes, text="Atualizar Lista", command=load_students)
+    btn_atualizar.pack(side="left", padx=6)
 
+    listbox.bind('<Double-1>', lambda e: on_list_select())
+
+    load_students()
 
 def abrir_tela_professor():
     ctk.set_appearance_mode("dark")
@@ -91,12 +161,44 @@ def abrir_tela_professor():
     entry_siape_prof = ctk.CTkEntry(janela_professor, width=200)
     entry_siape_prof.grid(row=5, column=1, padx=10, pady=10)
 
+    current_prof_id = {'id': None}
+
     def limpar_campos_professor():
         entry_name_prof.delete(0, tk.END)
         entry_phone_prof.delete(0, tk.END)
         entry_email_prof.delete(0, tk.END)
         entry_password_prof.delete(0, tk.END)
         entry_siape_prof.delete(0, tk.END)
+        current_prof_id['id'] = None
+        btn_salvar_prof.configure(text="Salvar")
+
+    list_frame = tk.Frame(janela_professor)
+    list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+    scrollbar = tk.Scrollbar(list_frame)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
+    listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    scrollbar.config(command=listbox.yview)
+
+    def load_professors():
+        listbox.delete(0, tk.END)
+        for p in Teacher.select():
+            listbox.insert(tk.END, f"{p.id} | {p.name} | {p.siape}")
+
+    def on_prof_select(event=None):
+        sel = listbox.curselection()
+        if not sel:
+            return
+        val = listbox.get(sel[0])
+        pid = int(val.split('|')[0].strip())
+        p = Teacher.get_by_id(pid)
+        entry_name_prof.delete(0, tk.END); entry_name_prof.insert(0, p.name)
+        entry_phone_prof.delete(0, tk.END); entry_phone_prof.insert(0, p.phone)
+        entry_email_prof.delete(0, tk.END); entry_email_prof.insert(0, p.email)
+        entry_password_prof.delete(0, tk.END); entry_password_prof.insert(0, p.password)
+        entry_siape_prof.delete(0, tk.END); entry_siape_prof.insert(0, p.siape)
+        current_prof_id['id'] = p.id
+        btn_salvar_prof.configure(text="Atualizar")
 
     def salvar_professor():
         name = entry_name_prof.get()
@@ -109,18 +211,55 @@ def abrir_tela_professor():
             messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
             return
 
-        novo_professor = Teacher.create(name=name, phone=phone, email=email, password=password, siape=siape)
-        messagebox.showinfo("Sucesso", f"Professor {novo_professor.name} salvo com sucesso!")
+        try:
+            if current_prof_id['id'] is None:
+                novo_professor = Teacher.create(name=name, phone=phone, email=email, password=password, siape=siape)
+                messagebox.showinfo("Sucesso", f"Professor {novo_professor.name} salvo com sucesso!")
+            else:
+                p = Teacher.get_by_id(current_prof_id['id'])
+                p.name = name
+                p.phone = phone
+                p.email = email
+                p.password = password
+                p.siape = siape
+                p.save()
+                messagebox.showinfo("Sucesso", f"Professor {p.name} atualizado com sucesso!")
+        except IntegrityError as e:
+            messagebox.showerror("Erro", f"Falha ao salvar: {e}")
         limpar_campos_professor()
+        load_professors()
+
+    def editar_prof_selecionado():
+        on_prof_select()
+
+    def excluir_prof_selecionado():
+        sel = listbox.curselection()
+        if not sel:
+            messagebox.showwarning("Aviso", "Nenhum registro selecionado.")
+            return
+        val = listbox.get(sel[0])
+        pid = int(val.split('|')[0].strip())
+        if messagebox.askyesno("Confirma", "Deseja excluir este professor?"):
+            p = Teacher.get_by_id(pid)
+            p.delete_instance()
+            limpar_campos_professor()
+            load_professors()
 
     lb_botoes_prof = ctk.CTkFrame(janela_professor)
-    lb_botoes_prof.grid(row=6, column=0, columnspan=2, pady=20)
-    
+    lb_botoes_prof.grid(row=6, column=0, columnspan=2, pady=5)
     btn_salvar_prof = ctk.CTkButton(lb_botoes_prof, text="Salvar", command=salvar_professor)
-    btn_salvar_prof.pack(side="left", padx=10)
-
+    btn_salvar_prof.pack(side="left", padx=6)
     btn_limpar_prof = ctk.CTkButton(lb_botoes_prof, text="Limpar", command=limpar_campos_professor)
-    btn_limpar_prof.pack(side="left", padx=10)
+    btn_limpar_prof.pack(side="left", padx=6)
+    btn_editar_prof = ctk.CTkButton(lb_botoes_prof, text="Editar", command=editar_prof_selecionado)
+    btn_editar_prof.pack(side="left", padx=6)
+    btn_excluir_prof = ctk.CTkButton(lb_botoes_prof, text="Excluir", command=excluir_prof_selecionado)
+    btn_excluir_prof.pack(side="left", padx=6)
+    btn_atualizar_prof = ctk.CTkButton(lb_botoes_prof, text="Atualizar Lista", command=load_professors)
+    btn_atualizar_prof.pack(side="left", padx=6)
+
+    listbox.bind('<Double-1>', lambda e: on_prof_select())
+    load_professors()
 
 
 menuPrincipal = ctk.CTk()
