@@ -47,13 +47,20 @@ def tela_aluno():
         current_student_id['id'] = None
         btn_salvar.configure(text="Salvar")
 
+    janela_aluno.grid_rowconfigure(7, weight=1)
+    janela_aluno.grid_columnconfigure(0, weight=1)
+    janela_aluno.grid_columnconfigure(1, weight=1)
+
     list_frame = tk.Frame(janela_aluno)
     list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+    list_frame.grid_rowconfigure(0, weight=1)
+    list_frame.grid_columnconfigure(0, weight=1)
     scrollbar = tk.Scrollbar(list_frame)
-    scrollbar.grid(side=tk.RIGHT, fill=tk.Y)
+    scrollbar.grid(row=0, column=1, sticky="ns")
     listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
-    listbox.grid(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    listbox.grid(row=0, column=0, sticky="nsew")
     scrollbar.config(command=listbox.yview)
+    # bind será registrado após a função on_list_select ser definida
 
     def load_students():
         listbox.delete(0, tk.END)
@@ -140,6 +147,8 @@ def tela_aluno():
 
 
     load_students()
+    # agora que on_list_select foi definida, registra o bind
+    listbox.bind("<<ListboxSelect>>", on_list_select)
 
 def abrir_tela_professor():
     ctk.set_appearance_mode("dark")
@@ -182,22 +191,28 @@ def abrir_tela_professor():
 
     list_frame = tk.Frame(janela_professor)
     list_frame.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
+    janela_professor.grid_rowconfigure(7, weight=1)
+    janela_professor.grid_columnconfigure(0, weight=1)
+    janela_professor.grid_columnconfigure(1, weight=1)
+    list_frame.grid_rowconfigure(0, weight=1)
+    list_frame.grid_columnconfigure(0, weight=1)
     scrollbar = tk.Scrollbar(list_frame)
-    scrollbar.grid(side=tk.RIGHT, fill=tk.Y)
-    listbox = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
-    listbox.grid(side=tk.LEFT, fill=tk.BOTH, expand=True)
-    scrollbar.config(command=listbox.yview)
+    scrollbar.grid(row=0, column=1, sticky="ns")
+    listbox_prof = tk.Listbox(list_frame, height=8, yscrollcommand=scrollbar.set)
+    listbox_prof.grid(row=0, column=0, sticky="nsew")
+    scrollbar.config(command=listbox_prof.yview)
+    # bind será registrado após a função on_prof_select ser definida
 
     def load_professors():
-        listbox.delete(0, tk.END)
+        listbox_prof.delete(0, tk.END)
         for p in Teacher.select():
-            listbox.insert(tk.END, f"{p.id} | {p.name} | {p.siape}")
+            listbox_prof.insert(tk.END, f"{p.id} | {p.name} | {p.siape}")
 
     def on_prof_select(event=None):
-        sel = listbox.curselection()
+        sel = listbox_prof.curselection()
         if not sel:
             return
-        val = listbox.get(sel[0])
+        val = listbox_prof.get(sel[0])
         pid = int(val.split('|')[0].strip())
         p = Teacher.get_by_id(pid)
         entry_name_prof.delete(0, tk.END); entry_name_prof.insert(0, p.name)
@@ -241,11 +256,11 @@ def abrir_tela_professor():
         on_prof_select()
 
     def excluir_prof_selecionado():
-        sel = listbox.curselection()
+        sel = listbox_prof.curselection()
         if not sel:
             messagebox.showwarning("Aviso", "Nenhum registro selecionado.")
             return
-        val = listbox.get(sel[0])
+        val = listbox_prof.get(sel[0])
         pid = int(val.split('|')[0].strip())
         if messagebox.askyesno("Confirma", "Deseja excluir este professor?"):
             p = Teacher.get_by_id(pid)
@@ -267,15 +282,5 @@ def abrir_tela_professor():
     btn_atualizar_prof.grid(side="left", padx=6)
 
     load_professors()
-
-
-menuPrincipal = ctk.CTk()
-menuPrincipal.title("Menu Principal")
-menuPrincipal.geometry("600x500")
-ctk.set_appearance_mode("dark")
-ctk.CTkLabel(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 30)).grid(pady=20)
-
-ctk.CTkButton(menuPrincipal, text="Alunos", command=tela_aluno, font=("Arial", 17)).grid(pady=10)
-ctk.CTkButton(menuPrincipal, text="Professores", command=abrir_tela_professor, font=("Arial", 17)).grid(pady=10)
-
-menuPrincipal.mainloop()
+    # agora que on_prof_select foi definida, registra o bind
+    listbox_prof.bind("<<ListboxSelect>>", on_prof_select)
