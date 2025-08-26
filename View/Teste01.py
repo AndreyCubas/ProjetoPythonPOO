@@ -8,7 +8,7 @@ def tela_aluno():
     ctk.set_appearance_mode("dark")
     janela_aluno = ctk.CTkToplevel()
     janela_aluno.title("Cadastro de Aluno")
-    janela_aluno.geometry("350x450") 
+    janela_aluno.geometry("700x550") 
 
     ctk.CTkLabel(janela_aluno, text="Tela de Aluno").grid(row=0, column=0, columnspan=2, padx=5, pady=5)
     
@@ -129,15 +129,13 @@ def tela_aluno():
     btn_atualizar = ctk.CTkButton(lb_botoes, text="Atualizar Lista", command=load_students)
     btn_atualizar.pack(side="left", padx=6)
 
-    listbox.bind('<Double-1>', lambda e: on_list_select())
-
     load_students()
 
 def abrir_tela_professor():
     ctk.set_appearance_mode("dark")
     janela_professor = ctk.CTkToplevel()
     janela_professor.title("Cadastro de Professor")
-    janela_professor.geometry("350x450")
+    janela_professor.geometry("650x950")
 
     ctk.CTkLabel(janela_professor, text="Tela de Professor").grid(row=0, column=0, columnspan=2, padx=5, pady=5)
 
@@ -258,13 +256,12 @@ def abrir_tela_professor():
     btn_atualizar_prof = ctk.CTkButton(lb_botoes_prof, text="Atualizar Lista", command=load_professors)
     btn_atualizar_prof.pack(side="left", padx=6)
 
-    listbox.bind('<Double-1>', lambda e: on_prof_select())
     load_professors()
 
 
 menuPrincipal = ctk.CTk()
 menuPrincipal.title("Menu Principal")
-menuPrincipal.geometry("400x300")
+menuPrincipal.geometry("600x500")
 ctk.set_appearance_mode("dark")
 ctk.CTkLabel(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 30)).pack(pady=20)
 
