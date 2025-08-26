@@ -47,8 +47,4 @@ class Task(BaseModel):
     student = ForeignKeyField(Student, backref="tasks")
     
 my_database.connect()
-<<<<<<< HEAD
-my_database.create_tables([Course,Teacher, Task, Student])
-=======
-my_database.create_tables([Course,Teacher, Task, Student])
->>>>>>> b47e31540d1a1e2e9d4e7cb7d9565b04fc90fc94
+my_database.create_tables([Course, Teacher, Task, Student])

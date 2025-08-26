@@ -78,7 +78,4 @@ def delete_task():
 
     except Task.DoesNotExist:
         print("Tarefa não encontrada.")
-<<<<<<< HEAD
-
-=======
->>>>>>> b47e31540d1a1e2e9d4e7cb7d9565b04fc90fc94
+    

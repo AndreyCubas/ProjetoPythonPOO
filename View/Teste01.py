@@ -1,0 +1,135 @@
+import customtkinter as ctk
+from Models.Model import Student, Teacher
+import tkinter as tk
+from tkinter import messagebox
+
+def tela_aluno():
+    ctk.set_appearance_mode("dark")
+    janela_aluno = ctk.CTkToplevel()
+    janela_aluno.title("Cadastro de Aluno")
+    janela_aluno.geometry("350x450") 
+
+    ctk.CTkLabel(janela_aluno, text="Tela de Aluno").grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+    
+    ctk.CTkLabel(janela_aluno, text="Nome:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+    entry_name = ctk.CTkEntry(janela_aluno, width=200)
+    entry_name.grid(row=1, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_aluno, text="Telefone:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
+    entry_phone = ctk.CTkEntry(janela_aluno, width=200)
+    entry_phone.grid(row=2, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_aluno, text="Email:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
+    entry_email = ctk.CTkEntry(janela_aluno, width=200)
+    entry_email.grid(row=3, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_aluno, text="Senha:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
+    entry_password = ctk.CTkEntry(janela_aluno, show="*", width=200)
+    entry_password.grid(row=4, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_aluno, text="Matrícula:").grid(row=5, column=0, padx=10, pady=10, sticky="w")
+    entry_registration = ctk.CTkEntry(janela_aluno, width=200)
+    entry_registration.grid(row=5, column=1, padx=10, pady=10)
+
+    def limpar_campos():
+        entry_name.delete(0, tk.END)
+        entry_phone.delete(0, tk.END)
+        entry_email.delete(0, tk.END)
+        entry_password.delete(0, tk.END)
+        entry_registration.delete(0, tk.END)
+
+    def salvar_aluno():
+        name = entry_name.get()
+        phone = entry_phone.get()
+        email = entry_email.get()
+        password = entry_password.get()
+        registration = entry_registration.get()
+
+        if not all([name, phone, email, password, registration]):
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
+            return
+
+    novo_aluno = Student.create(name=name, phone=phone, email=email, password=password, registration=registration)
+    messagebox.showinfo("Sucesso", f"Aluno {novo_aluno.name} salvo com sucesso!")
+    limpar_campos()
+
+    lb_botoes = ctk.CTkFrame(janela_aluno)
+    lb_botoes.grid(row=6, column=0, columnspan=2, pady=20)
+    
+    btn_salvar = ctk.CTkButton(lb_botoes, text="Salvar", command=salvar_aluno)
+    btn_salvar.pack(side="left", padx=10)
+
+    btn_limpar = ctk.CTkButton(lb_botoes, text="Limpar", command=limpar_campos)
+    btn_limpar.pack(side="left", padx=10)
+
+
+def abrir_tela_professor():
+    ctk.set_appearance_mode("dark")
+    janela_professor = ctk.CTkToplevel()
+    janela_professor.title("Cadastro de Professor")
+    janela_professor.geometry("350x450")
+
+    ctk.CTkLabel(janela_professor, text="Tela de Professor").grid(row=0, column=0, columnspan=2, padx=5, pady=5)
+
+    ctk.CTkLabel(janela_professor, text="Nome:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+    entry_name_prof = ctk.CTkEntry(janela_professor, width=200)
+    entry_name_prof.grid(row=1, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_professor, text="Telefone:").grid(row=2, column=0, padx=10, pady=10, sticky="w")
+    entry_phone_prof = ctk.CTkEntry(janela_professor, width=200)
+    entry_phone_prof.grid(row=2, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_professor, text="Email:").grid(row=3, column=0, padx=10, pady=10, sticky="w")
+    entry_email_prof = ctk.CTkEntry(janela_professor, width=200)
+    entry_email_prof.grid(row=3, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_professor, text="Senha:").grid(row=4, column=0, padx=10, pady=10, sticky="w")
+    entry_password_prof = ctk.CTkEntry(janela_professor, show="*", width=200)
+    entry_password_prof.grid(row=4, column=1, padx=10, pady=10)
+
+    ctk.CTkLabel(janela_professor, text="SIAPE:").grid(row=5, column=0, padx=10, pady=10, sticky="w")
+    entry_siape_prof = ctk.CTkEntry(janela_professor, width=200)
+    entry_siape_prof.grid(row=5, column=1, padx=10, pady=10)
+
+    def limpar_campos_professor():
+        entry_name_prof.delete(0, tk.END)
+        entry_phone_prof.delete(0, tk.END)
+        entry_email_prof.delete(0, tk.END)
+        entry_password_prof.delete(0, tk.END)
+    entry_siape_prof.delete(0, tk.END)
+
+    def salvar_professor():
+        name = entry_name_prof.get()
+        phone = entry_phone_prof.get()
+        email = entry_email_prof.get()
+        password = entry_password_prof.get()
+        siape = entry_siape_prof.get()
+
+        if not all([name, phone, email, password, siape]):
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos.")
+            return
+
+        novo_professor = Teacher.create(name=name, phone=phone, email=email, password=password, siape=siape)
+        messagebox.showinfo("Sucesso", f"Professor {novo_professor.name} salvo com sucesso!")
+        limpar_campos_professor()
+
+    lb_botoes_prof = ctk.CTkFrame(janela_professor)
+    lb_botoes_prof.grid(row=6, column=0, columnspan=2, pady=20)
+    
+    btn_salvar_prof = ctk.CTkButton(lb_botoes_prof, text="Salvar", command=salvar_professor)
+    btn_salvar_prof.pack(side="left", padx=10)
+
+    btn_limpar_prof = ctk.CTkButton(lb_botoes_prof, text="Limpar", command=limpar_campos_professor)
+    btn_limpar_prof.pack(side="left", padx=10)
+
+
+menuPrincipal = ctk.CTk()
+menuPrincipal.title("Menu Principal")
+menuPrincipal.geometry("400x300")
+ctk.set_appearance_mode("dark")
+ctk.CTkLabel(menuPrincipal, text="Sistema de Cadastro", font=("Arial", 30)).pack(pady=20)
+
+ctk.CTkButton(menuPrincipal, text="Alunos", command=tela_aluno, font=("Arial", 17)).pack(pady=10)
+ctk.CTkButton(menuPrincipal, text="Professores", command=abrir_tela_professor, font=("Arial", 17)).pack(pady=10)
+
+menuPrincipal.mainloop()

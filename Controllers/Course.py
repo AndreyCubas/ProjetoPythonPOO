@@ -10,10 +10,7 @@ def createCourse(current_professor):
     descricao = input("Descrição: ")
     conteudo = input("Conteúdo: ")
 
-<<<<<<< HEAD
-=======
     # Criando o curso com que tenha o professor criado
->>>>>>> b47e31540d1a1e2e9d4e7cb7d9565b04fc90fc94
     course = Course.create(
         name=nome,
         description=descricao,
@@ -69,8 +66,6 @@ def editCourse():
             break
         else:
             print("Opção inválida. Tente novamente.")
-<<<<<<< HEAD
-=======
 
 def deleteCourse():
     listCourses()
@@ -81,6 +76,3 @@ def deleteCourse():
         print(f"Curso '{course.name}' deletado com sucesso!")
     except Course.DoesNotExist:
         print("Curso não encontrado.")
-
-    
->>>>>>> b47e31540d1a1e2e9d4e7cb7d9565b04fc90fc94
