@@ -61,9 +61,19 @@ def tela_aluno():
             listbox.insert(tk.END, f"{s.id} | {s.name} | {s.registration}")
 
     def on_list_select(event=None):
-        listbox = tk.Listbox(janela_aluno, width=30, height=10)
-        listbox.grid()
-
+        sel = listbox.curselection()
+        if not sel:
+            return
+        val = listbox.get(sel[0])
+        sid = int(val.split('|')[0].strip())
+        s = Student.get_by_id(sid)
+        entry_name.delete(0, tk.END); entry_name.insert(0, s.name)
+        entry_phone.delete(0, tk.END); entry_phone.insert(0, s.phone)
+        entry_email.delete(0, tk.END); entry_email.insert(0, s.email)
+        entry_password.delete(0, tk.END); entry_password.insert(0, s.password)
+        entry_registration.delete(0, tk.END); entry_registration.insert(0, s.registration)
+        current_student_id['id'] = s.id
+        btn_salvar.configure(text="Atualizar")
 
     def salvar_aluno():
         name = entry_name.get()
@@ -112,16 +122,22 @@ def tela_aluno():
 
     lb_botoes = ctk.CTkFrame(janela_aluno)
     lb_botoes.grid(row=6, column=0, columnspan=2, pady=5)
+
     btn_salvar = ctk.CTkButton(lb_botoes, text="Salvar", command=salvar_aluno)
-    btn_salvar.grid(side="left", padx=6)
+    btn_salvar.grid(row=0, column=0, padx=5)
+
     btn_limpar = ctk.CTkButton(lb_botoes, text="Limpar", command=limpar_campos)
-    btn_limpar.grid(side="left", padx=6)
+    btn_limpar.grid(row=0, column=1, padx=5)
+
     btn_editar = ctk.CTkButton(lb_botoes, text="Editar", command=editar_selecionado)
-    btn_editar.grid(side="left", padx=6)
+    btn_editar.grid(row=0, column=2, padx=5)
+
     btn_excluir = ctk.CTkButton(lb_botoes, text="Excluir", command=excluir_selecionado)
-    btn_excluir.grid(side="left", padx=6)
+    btn_excluir.grid(row=0, column=3, padx=5)
+
     btn_atualizar = ctk.CTkButton(lb_botoes, text="Atualizar Lista", command=load_students)
-    btn_atualizar.grid(side="left", padx=6)
+    btn_atualizar.grid(row=0, column=4, padx=5)
+
 
     load_students()
 
